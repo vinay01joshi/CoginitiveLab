@@ -1,3 +1,4 @@
+import { Photo, AiAtributes } from './../shared/modles/photo';
 import { UploadService } from './upload.service';
 import { Component, OnInit } from '@angular/core';
 import { RequestOptions } from "@angular/http";
@@ -9,11 +10,11 @@ import { RequestOptions } from "@angular/http";
 })
 export class UploadComponent implements OnInit {
 
-  photos : any[];  
+  photos : Photo[];  
   baseUrl : string = "http://localhost:63615";
   recogRes :string;
-  constructor(private uploadService : UploadService) {
-   }
+  recoginizeObject;
+  constructor(private uploadService : UploadService) { }
 
 
   ngOnInit(): void {
@@ -48,9 +49,17 @@ export class UploadComponent implements OnInit {
         } 
   }
 
-  recognize(photo){
+  recognize(photo:Photo){     
+    let selectedPhoto =  <Photo> this.photos.find(p => p.name == photo.name);   
     this.uploadService.recognize(photo.name)
-      .subscribe( res => this.recogRes = res );
+      .subscribe( res => {
+        this.recogRes = res
+        let result  = JSON.parse(res)[0];      
+        selectedPhoto.aiAtributes = new AiAtributes();
+        selectedPhoto.isRecognized = true;        
+        selectedPhoto.aiAtributes.gender = result.faceAttributes.gender;
+        selectedPhoto.aiAtributes.aproxAge = result.faceAttributes.age;  
+      });
   }
   
 }
