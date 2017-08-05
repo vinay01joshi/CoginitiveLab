@@ -1,63 +1,56 @@
-import { Component } from '@angular/core';
+import { UploadService } from './upload.service';
+import { Component, OnInit } from '@angular/core';
+import { RequestOptions } from "@angular/http";
 
 @Component({
   selector: 'upload',
   templateUrl: './upload.component.html',
   styleUrls: ['./upload.component.css']
 })
-export class UploadComponent {
+export class UploadComponent implements OnInit {
 
-  filesToUpload: Array<File>;
-  url = "http://localhost:63615/api/upload";
-  imageSrc:string;
-  constructor() {
-    this.filesToUpload = [];
+  photos : any[];  
+  baseUrl : string = "http://localhost:63615";
+  recogRes :string;
+  constructor(private uploadService : UploadService) {
    }
 
-   upload(){
-      this.makeFileRequet(this.url,[],this.filesToUpload)
-        .then(result => {
-          console.log(result);
-        })
-        .catch(err =>{
-          console.log(err);
-        });
-   }
 
-   fileChange(fileInput : any){
-     this.filesToUpload = <Array<File>> fileInput.target.files;
-     let file = this.filesToUpload[0];
-     let reader = new FileReader();
+  ngOnInit(): void {
+    this.uploadService.getAll()
+        .subscribe(photos => this.photos = photos.photos);
+  }
 
-     reader.addEventListener("load",()=>{
-        this.imageSrc = reader.result;
-     },false);
+  delete(photo){
+    if(confirm("Are you sure you want to delete?")){
+    
+    var index = this.photos.indexOf(photo);
+    this.photos.splice(index,1);
 
-     if(file){
-       reader.readAsDataURL(file);
-     }
-   }
+    this.uploadService.delete(photo.name) 
+      .subscribe(null,err => { alert('Not able to delete image.')});
+    }
+  }
 
-   makeFileRequet(url:string,params:Array<string>,files:Array<File>){
-     return new Promise((resolve,reject)=>{
-       var formData:any = new FormData();
-       var xhr = new XMLHttpRequest();
-       for(var i=0; i<files.length;i++){
-          formData.append("uploads[]",files[i],files[i].name);
-       }
+  fileChange(event){
 
-       xhr.onreadystatechange = () =>{
-         if(xhr.readyState === 4){
-            if(xhr.status === 200){
-              resolve(JSON.parse(xhr.response));
-            }else{
-              reject(xhr.response);
-            }
-         }
-       }
-        xhr.open("POST",url,true);
-        xhr.send(formData);
-     });
-   }
+    let fileList: FileList = event.target.files;
+    if(fileList.length > 0) {
+        let file: File = fileList[0];
+        let formData:FormData = new FormData();
+        formData.append('uploadFile', file, file.name);
+        let headers = new Headers();       
+        this.uploadService.post(formData)
+          .subscribe( photo => {
+            console.log(photo);
+            this.photos.push(photo.photos[0]);
+          });
+        } 
+  }
 
+  recognize(photo){
+    this.uploadService.recognize(photo.name)
+      .subscribe( res => this.recogRes = res );
+  }
+  
 }
