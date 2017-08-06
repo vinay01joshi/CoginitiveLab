@@ -1,0 +1,5 @@
+  <button class="btn btn-success" (click)="RecognizeFace('name')">Recognize</button>
+  <div *ngIf="isFaceRecognizied">
+    <span class="label label-default">{{image?.gender}}</span>
+    <span class="label label-primary">{{image?.age}}</span>
+  </div>

@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { Photo, AiAtributes } from './../shared/modles/photo';
 import { UploadService } from './upload.service';
 import { Component, OnInit } from '@angular/core';
@@ -11,7 +12,7 @@ import { RequestOptions } from "@angular/http";
 export class UploadComponent implements OnInit {
 
   photos : Photo[];  
-  baseUrl : string = "http://localhost:63615";
+  baseUrl : string = environment.baseUrl;
   recogRes :string;
   recoginizeObject;
   constructor(private uploadService : UploadService) { }
