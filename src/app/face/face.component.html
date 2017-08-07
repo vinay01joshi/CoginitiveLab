@@ -1,0 +1,51 @@
+<h1>Images</h1>
+<div class="file-upload">
+  <input type="file" class="upload" (change)="fileChange($event)"/>
+  <span>Upload</span>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-6">
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let image of images" (click)="select(image)">
+          {{image.name}}
+          <button class="btn btn-danger btn-xs float-right" (click)="delete(image)">Delete</button>
+      </li>
+    </ul>
+  </div>
+  <div class="col-md-6" *ngIf="isSelected">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          Selected Image
+          <button class="btn btn-success btn-xs float-right" (click)="recognize(currentImage)">Recognize</button>
+        </h3>
+      </div>
+      <div class="panel-body">
+        <div class="media">
+          <div class="media-left">
+            <a href="#">
+              <img src="{{ imageBaserUrl + currentImage?.url}}" height="200" width="200" alt="">
+            </a>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading"> {{ currentImage?.name }}</h4>   
+            image size &nbsp;
+            <span class="label label-default label-lg">{{currentImage?.size}}</span>
+            <br>
+            created date &nbsp;
+            <span class="label label-primary">{{ currentImage?.created | date }}</span>
+            <br>
+            <hr>             
+             <br>
+             gender &nbsp;
+             <span class="label label-success">{{currentImage?.gender}}</span>
+             <br>
+             age &nbsp;
+             <span class="label label-info">{{currentImage?.age}}</span>         
+          </div>
+        </div>         
+      </div>
+    </div>
+  </div>
+</div>
