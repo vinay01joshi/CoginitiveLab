@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { AuthHttp } from 'angular2-jwt/angular2-jwt';
 
 import { environment } from './../../../environments/environment';
 
@@ -8,10 +9,10 @@ import { environment } from './../../../environments/environment';
 export class ImageService {
 
   url = environment.apiBaseUrl+'/photos';
-  constructor(private http: Http) { }
+  constructor(private http: Http ,private authHttp: AuthHttp) { }
 
   get(){
-    return this.http.get(this.url)
+    return this.authHttp.get(this.url)
       .map(respones => respones.json());
   }
 
