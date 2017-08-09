@@ -48,10 +48,16 @@ import { AuthHttp,provideAuth } from "angular2-jwt/angular2-jwt";
         headerName: 'Authorization',        
         headerPrefix: 'Bearer ',
         tokenName: 'token',
-        tokenGetter: () => localStorage.getItem('token'),
+        tokenGetter: ()=> localStorage.getItem('token') ,
         globalHeaders: [{ 'Content-Type': 'application/json' }],        
         noJwtError: true})
       ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  get Token(){
+    return localStorage.getItem('token');
+  }
+ }
+
+//(() => localStorage.getItem('token')

@@ -55,7 +55,7 @@ export class FaceComponent implements OnInit {
         this.imageService.post(formData)
           .subscribe( photo => {
             console.log(photo);
-            this.images.push(photo.photos[0]);
+            this.images.push(photo);
           });
         } 
   }

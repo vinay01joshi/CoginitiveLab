@@ -22,6 +22,10 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/']);
         else
           this.invalidLogin = true;
+      },
+      error=>{
+        //alert('An unexpred error occured.')
+        console.log(error);
       });
   }
 
