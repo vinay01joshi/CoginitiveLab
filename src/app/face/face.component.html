@@ -7,7 +7,10 @@
 <div class="row">
   <div class="col-md-6">
     <ul class="list-group">
-      <li class="list-group-item" *ngFor="let image of images" (click)="select(image)">
+      <li class="list-group-item" 
+          *ngFor="let image of images" 
+          [class.active]="currentImage == image"
+          (click)="select(image)">
           {{image.name}}
           <button class="btn btn-danger btn-xs float-right" (click)="delete(image)">Delete</button>
       </li>

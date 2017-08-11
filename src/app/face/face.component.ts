@@ -17,7 +17,9 @@ export class FaceComponent implements OnInit {
 
   ngOnInit() {
     this.imageService.get()
-      .subscribe(images => this.images = images.photos);
+      .subscribe(images =>{
+          this.images = images;          
+      });
   }
 
   delete(image){
