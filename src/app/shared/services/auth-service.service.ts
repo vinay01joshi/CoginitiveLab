@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { JwtHelper, tokenNotExpired } from "angular2-jwt";
@@ -8,7 +9,7 @@ import 'rxjs/add/operator/map';
 export class AuthService {
 
   url = environment.apiBaseUrl;
-  constructor(private http: Http) { }
+  constructor(private http: Http ,private router: Router) { }
 
   login(credentials){
     return this.http.post(this.url+'/account',credentials)
@@ -25,6 +26,7 @@ export class AuthService {
 
   logout(){
      localStorage.removeItem('token');
+     this.router.navigate(['']);
   }
 
   get currentUser(){

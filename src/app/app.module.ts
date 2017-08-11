@@ -1,12 +1,14 @@
-import { AuthGuard } from './shared/services/auth-guard.service';
-import { AuthService } from './shared/services/auth-service.service';
-import { FaceService } from './shared/services/face.service';
-import { ImageService } from './shared/services/image.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {HttpModule} from '@angular/http';
 import {FormsModule} from '@angular/forms';
+
+import { AdminAuthGuard } from './shared/services/admin-auth-guard.service';
+import { AuthGuard } from './shared/services/auth-guard.service';
+import { AuthService } from './shared/services/auth-service.service';
+import { FaceService } from './shared/services/face.service';
+import { ImageService } from './shared/services/image.service';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -17,6 +19,7 @@ import { UploadComponent } from './upload/upload.component';
 import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
 import { AuthHttp,provideAuth } from "angular2-jwt/angular2-jwt";
+import { NoAccessComponent } from './no-access/no-access.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,8 @@ import { AuthHttp,provideAuth } from "angular2-jwt/angular2-jwt";
     NavbarComponent,
     UploadComponent,
     LoginComponent,
-    AdminComponent
+    AdminComponent,
+    NoAccessComponent
   ],
   imports: [
     BrowserModule,
@@ -35,15 +39,18 @@ import { AuthHttp,provideAuth } from "angular2-jwt/angular2-jwt";
     FormsModule,
     RouterModule.forRoot([
       {path : '', component: HomeComponent},
-      {path : 'admin', component: AdminComponent,canActivate:[AuthGuard]},
+      {path : 'admin', component: AdminComponent,canActivate:[AuthGuard,AdminAuthGuard]},
       {path : 'face', component: FaceComponent,canActivate:[AuthGuard]},
       {path : 'login', component: LoginComponent},
+      {path : 'no-access', component: NoAccessComponent},
+      {path : '**', component: NotFoundComponent},
     ])
   ],
   providers: [ImageService
     , FaceService
     , AuthService
     , AuthGuard
+    ,AdminAuthGuard
     , provideAuth({
         headerName: 'Authorization',        
         headerPrefix: 'Bearer ',
